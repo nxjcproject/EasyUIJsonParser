@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EasyUIJsonParser
 {
-    public class JsonTableParser
+    public class JsonToDataTable
     {
         public static DataTable ConvertToTable(string[] json, DataTable resourceTable)
         {
