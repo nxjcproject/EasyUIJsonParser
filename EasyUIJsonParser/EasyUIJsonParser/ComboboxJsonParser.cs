@@ -21,6 +21,10 @@ namespace EasyUIJsonParser
             {
                 sb.Append("{");
 
+                if (columnsToParse.Count() == 0)
+                {
+                    columnsToParse = GetColumnName(table);
+                }
                 for (int j = 0; j < columnsToParse.Length; j++)
                 {
                     if (j < columnsToParse.Length - 1)
@@ -38,6 +42,16 @@ namespace EasyUIJsonParser
             sb.Append("]");
 
             return sb.ToString();
+        }
+
+        private static string[] GetColumnName(DataTable dt)
+        {
+            IList<string> columns = new List<string>();
+            foreach (DataColumn item in dt.Columns)
+            {
+                columns.Add(item.ColumnName);
+            }
+            return columns.ToArray();
         }
     }
 }
