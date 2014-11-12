@@ -101,17 +101,17 @@ namespace EasyUIJsonParser
             result.Remove(result.Length - 1, 1);
         }
 
-        public static string DataTableToJson(DataTable table, string idColumn, string textColumn, string relativeColumn, object parentId = null)
+        public static string DataTableToJson(DataTable table, string idColumn, string textColumn, string relativeColumn, object parentId, params string[] otherColumns)
         {
             StringBuilder result = new StringBuilder();
             StringBuilder temp = new StringBuilder();
 
-            DataTableToJson(result, temp, table, idColumn, textColumn, relativeColumn, parentId);
+            DataTableToJson(result, temp, table, idColumn, textColumn, relativeColumn, parentId, otherColumns);
 
             return result.ToString();
         }
 
-        private static void DataTableToJson(StringBuilder result, StringBuilder temp, DataTable table, string idColumn, string textColumn, string relativeColumn, object parentId)
+        private static void DataTableToJson(StringBuilder result, StringBuilder temp, DataTable table, string idColumn, string textColumn, string relativeColumn, object parentId, params string[] otherColumns)
         {
             result.Append(temp.ToString());
             temp.Clear();
@@ -125,10 +125,17 @@ namespace EasyUIJsonParser
                     foreach (DataRow row in rows)
                     {
                         temp.Append("{\"id\":\"" + row[idColumn] + "\",\"text\":\"" + row[textColumn] + "\",\"state\":\"open\"");
+                        if (otherColumns != null)
+                        {
+                            foreach (string myOtherColumnId in otherColumns)
+                            {
+                                temp.Append(string.Format(",\"{0}\":\"{1}\"", myOtherColumnId, row[myOtherColumnId]));
+                            }
+                        }
                         if (table.Select(string.Format("{0}='{1}'", relativeColumn, row[idColumn])).Length > 0)
                         {
                             temp.Append(",\"children\":");
-                            DataTableToJson(result, temp, table, idColumn, textColumn, relativeColumn, row[idColumn]);
+                            DataTableToJson(result, temp, table, idColumn, textColumn, relativeColumn, row[idColumn], otherColumns);
                             result.Append(temp.ToString());
                             temp.Clear();
                         }
