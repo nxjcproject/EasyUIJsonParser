@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasyUIJsonParser.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace EasyUIJsonParser
 
                 if (columnsToParse.Count() == 0)
                 {
-                    columnsToParse = GetColumnName(table);
+                    columnsToParse = ParserHelper.GetColumnName(table);
                 }
                 foreach (string column in columnsToParse)
                 {
@@ -37,16 +38,6 @@ namespace EasyUIJsonParser
             sb.Append("]}");
 
             return sb.ToString();
-        }
-
-        private static string[] GetColumnName(DataTable dt)
-        {
-            IList<string> columns = new List<string>();
-            foreach (DataColumn item in dt.Columns)
-            {
-                columns.Add(item.ColumnName);
-            }
-            return columns.ToArray();
         }
 
         /// <summary>
@@ -84,7 +75,7 @@ namespace EasyUIJsonParser
 
                 if (columnsToParse.Count() == 0)
                 {
-                    columnsToParse = GetColumnName(table);
+                    columnsToParse = ParserHelper.GetColumnName(table);
                 }
                 foreach (string column in columnsToParse)
                 {
