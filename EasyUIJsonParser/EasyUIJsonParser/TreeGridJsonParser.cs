@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasyUIJsonParser.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -75,6 +76,10 @@ namespace EasyUIJsonParser
         {
             if (table == null || table.Rows.Count == 0)
                 return "[]";
+            if (columnsToParse.Count() == 0)
+            {
+                columnsToParse = ParserHelper.GetColumnName(table);
+            }
 
             StringBuilder sb = new StringBuilder();
             sb.Append("{\"total\":").Append(table.Rows.Count).Append(",");
