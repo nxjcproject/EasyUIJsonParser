@@ -10,13 +10,14 @@ namespace EasyUIJsonParser
     public class TreeJsonParser
     {
         /// <summary>
-        /// 按levelCode生成json
+        /// 按levelCode生成json，但id从指定列中取值
         /// </summary>
-        /// <param name="table">源表</param>
-        /// <param name="levelCodeColumn">层次码</param>
-        /// <param name="textColumn">呈现文字</param>
-        /// <returns>json</returns>
-        public static string DataTableToJsonByLevelCode(DataTable table, string levelCodeColumn, string textColumn)
+        /// <param name="table"></param>
+        /// <param name="levelCodeColumn"></param>
+        /// <param name="idColumn"></param>
+        /// <param name="textColumn"></param>
+        /// <returns></returns>
+        public static string DataTableToJsonByLevelCodeWithIdColumn(DataTable table, string levelCodeColumn, string idColumn, string textColumn)
         {
             // 当表为空时，返回空json
             if (table == null || table.Rows.Count == 0)
@@ -41,11 +42,23 @@ namespace EasyUIJsonParser
             // 获取层次码前缀
             string prefix = table.Rows[0][levelCodeColumn].ToString().Substring(0, 1);
             // 递归生成节点
-            Append(result, table, levelCodeColumn, textColumn, prefix);
+            Append(result, table, levelCodeColumn, idColumn, textColumn, prefix);
 
             result.Append("]");
 
             return result.ToString();
+        }
+
+        /// <summary>
+        /// 按levelCode生成json
+        /// </summary>
+        /// <param name="table">源表</param>
+        /// <param name="levelCodeColumn">层次码</param>
+        /// <param name="textColumn">呈现文字</param>
+        /// <returns>json</returns>
+        public static string DataTableToJsonByLevelCode(DataTable table, string levelCodeColumn, string textColumn)
+        {
+            return DataTableToJsonByLevelCodeWithIdColumn(table, levelCodeColumn, levelCodeColumn, textColumn);
         }
 
         /// <summary>
@@ -75,7 +88,21 @@ namespace EasyUIJsonParser
             return result.ToString();
         }
 
+        /// <summary>
+        /// 按LevelCode生成json的辅助方法，与另一重载区别仅仅是将levelCodeColumn赋给了idColumn
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="table"></param>
+        /// <param name="levelCodeColumn"></param>
+        /// <param name="textColumn"></param>
+        /// <param name="parentLevelCode"></param>
+        /// <param name="otherColumns"></param>
         private static void Append(StringBuilder result, DataTable table, string levelCodeColumn, string textColumn, string parentLevelCode, params string[] otherColumns)
+        {
+            Append(result, table, levelCodeColumn, levelCodeColumn, textColumn, parentLevelCode, otherColumns);
+        }
+
+        private static void Append(StringBuilder result, DataTable table, string levelCodeColumn, string idColumn, string textColumn, string parentLevelCode, params string[] otherColumns)
         {
             // 子节点筛选器，规则：以parentLevelCode开头，长度为parentLevelCode长度+2
             string childrenFilter = levelCodeColumn + " like '" + parentLevelCode + "*' and len(" + levelCodeColumn + ") = " + (parentLevelCode.Length + 2);
@@ -87,14 +114,14 @@ namespace EasyUIJsonParser
 
             foreach (DataRow child in children)
             {
-                result.Append("{\"id\":\"" + child[levelCodeColumn] + "\",\"text\":\"" + child[textColumn] + "\"");
+                result.Append("{\"id\":\"" + child[idColumn] + "\",\"text\":\"" + child[textColumn] + "\"");
                 foreach (string column in otherColumns)
                 {
                     result.Append(",\"" + column + "\":\"" + child[column] + "\"");
                 }
                 result.Append(",\"state\":\"open\",\"children\":[");
                 // 递归获取当前节点的子节点
-                Append(result, table, levelCodeColumn, textColumn, child[levelCodeColumn].ToString(), otherColumns);
+                Append(result, table, levelCodeColumn, idColumn, textColumn, child[levelCodeColumn].ToString(), otherColumns);
                 result.Append("]},");
             }
             // 移除json中最后一个元素跟着的多余逗号
