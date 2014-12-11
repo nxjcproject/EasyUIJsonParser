@@ -50,6 +50,35 @@ namespace EasyUIJsonParser
         }
 
         /// <summary>
+        /// 按levelCode生成json，但id从指定列中取值（可附带其他列信息）
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="levelCodeColumn"></param>
+        /// <param name="idColumn"></param>
+        /// <param name="textColumn"></param>
+        /// <param name="otherColumns"></param>
+        /// <returns></returns>
+        public static string DataTableToJsonByLevelCodeWithIdColumn(DataTable table, string levelCodeColumn, string idColumn, string textColumn, params string[] otherColumns)
+        {
+            // 当表为空时，返回空json
+            if (table == null || table.Rows.Count == 0)
+                return "[]";
+
+            // 结果builder
+            StringBuilder result = new StringBuilder();
+            result.Append("[");
+
+            // 获取层次码前缀
+            string prefix = table.Rows[0][levelCodeColumn].ToString().Substring(0, 1);
+            // 递归生成节点
+            Append(result, table, levelCodeColumn, idColumn, textColumn, prefix, otherColumns);
+
+            result.Append("]");
+
+            return result.ToString();
+        }
+
+        /// <summary>
         /// 按levelCode生成json
         /// </summary>
         /// <param name="table">源表</param>
@@ -70,22 +99,7 @@ namespace EasyUIJsonParser
         /// <returns>json</returns>
         public static string DataTableToJsonByLevelCode(DataTable table, string levelCodeColumn, string textColumn, params string[] otherColumns)
         {
-            // 当表为空时，返回空json
-            if (table == null || table.Rows.Count == 0)
-                return "[]";
-
-            // 结果builder
-            StringBuilder result = new StringBuilder();
-            result.Append("[");
-
-            // 获取层次码前缀
-            string prefix = table.Rows[0][levelCodeColumn].ToString().Substring(0, 1);
-            // 递归生成节点
-            Append(result, table, levelCodeColumn, textColumn, prefix, otherColumns);
-
-            result.Append("]");
-
-            return result.ToString();
+            return DataTableToJsonByLevelCodeWithIdColumn(table, levelCodeColumn, levelCodeColumn, textColumn, otherColumns);
         }
 
         /// <summary>
