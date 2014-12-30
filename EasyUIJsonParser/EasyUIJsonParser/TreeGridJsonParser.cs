@@ -12,6 +12,62 @@ namespace EasyUIJsonParser
     public class TreeGridJsonParser
     {
         /// <summary>
+        /// 按有LevelCode的表格生成json
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="levelCodeColumn"></param>
+        /// <param name="columnsToParse"></param>
+        /// <returns></returns>
+        public static string DataTableToJsonByLevelCode(DataTable table, string levelCodeColumn, params string[] columnsToParse)
+        {
+            // 当表为空时，返回空json
+            if (table == null || table.Rows.Count == 0)
+                return "[]";
+
+            if (columnsToParse.Count() == 0)
+                columnsToParse = ParserHelper.GetColumnName(table);
+
+            // 结果builder
+            StringBuilder result = new StringBuilder();
+            result.Append("[");
+
+            // 获取层次码前缀
+            string prefix = table.Rows[0][levelCodeColumn].ToString().Substring(0, 1);
+            // 递归生成节点
+            DataTableToJsonByLevelCodeAppend(result, table, levelCodeColumn, prefix, columnsToParse);
+
+            result.Append("]");
+
+            return result.ToString();
+        }
+
+        private static void DataTableToJsonByLevelCodeAppend(StringBuilder result, DataTable table, string levelCodeColumn, string parentLevelCode, params string[] otherColumns)
+        {
+            // 子节点筛选器，规则：以parentLevelCode开头，长度为parentLevelCode长度+2
+            string childrenFilter = levelCodeColumn + " like '" + parentLevelCode + "*' and len(" + levelCodeColumn + ") = " + (parentLevelCode.Length + 2);
+            // 获取子节点集合
+            DataRow[] children = table.Select(childrenFilter);
+
+            if (children.Count() == 0)
+                return;
+
+            foreach (DataRow child in children)
+            {
+                result.Append("{\"id\":\"" + child[levelCodeColumn] + "\"");
+                foreach (string column in otherColumns)
+                {
+                    result.Append(",\"" + column + "\":\"" + child[column] + "\"");
+                }
+                result.Append(",\"state\":\"open\",\"children\":[");
+                // 递归获取当前节点的子节点
+                DataTableToJsonByLevelCodeAppend(result, table, levelCodeColumn, child[levelCodeColumn].ToString(), otherColumns);
+                result.Append("]},");
+            }
+            // 移除json中最后一个元素跟着的多余逗号
+            result.Remove(result.Length - 1, 1);
+        }
+
+        /// <summary>
         /// 按groupBy列生成带有一级children的json
         /// </summary>
         /// <param name="table"></param>
