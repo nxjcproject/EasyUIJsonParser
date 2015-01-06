@@ -65,7 +65,7 @@ namespace EasyUIJsonParser
                 /////////////////////////////////增加一列
                 Json.Append("{");
                 Json.Append("\"title\":\"名称\"");
-                Json.Append(", \"field\":\"RowName\"");
+                Json.Append(", \"field\":\"RowName\",\"width\":100");
                 Json.Append("}");
                 /////////////////////////////////增加一列
                 for (int i = 0; i < m_MaxColumnCount; i++)
@@ -87,7 +87,7 @@ namespace EasyUIJsonParser
                     {
                         Json.Append("\"title\":\"数据" + (i + 1).ToString() + "\"");
                     }
-                    Json.Append(", \"field\":\"" + myDataTable.Columns[i].ColumnName.ToString() + "\"");
+                    Json.Append(", \"field\":\"" + myDataTable.Columns[i].ColumnName.ToString() + "\",\"width\":100");
                     Json.Append("}");
                 }
                 Json.Append("],\"Units\":{");
