@@ -10,6 +10,43 @@ namespace EasyUIJsonParser
 {
     public class ChartJsonParser
     {
+
+        /// <summary>
+        /// 获取带DataGrid的仪表盘
+        /// </summary>
+        /// <param name="title">表盘标题</param>
+        /// <param name="unit">表盘单位</param>
+        /// <param name="actualValue">实际值</param>
+        /// <param name="alarmValue">报警设定值</param>
+        /// <param name="maximunValue">表盘上限（可选）</param>
+        /// <param name="minimumValue">表盘下限（可选）</param>
+        /// <returns></returns>
+        public static string GetGridMeterGaugeJsonString(string title, string unit, decimal actualValue, decimal alarmValue, decimal maximunValue = 0, decimal minimumValue = 0)
+        {
+            string[] myColumnsName = new string[] { "项目", "值" };
+            string[] myRowsName = new string[] { "表盘实际值", "报警设定值", "表盘的上限值", "表盘下限值" };
+            decimal[] myRowsValue = new decimal[] { actualValue, alarmValue, maximunValue, minimumValue };
+            string myUnitX = unit;
+            string myUnitY = "";
+            int myFrozenColumns = 0;
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("RowName", typeof(string));
+            dt.Columns.Add("Value", typeof(decimal));
+
+            for (int i = 0; i < myRowsName.Length; i++)
+            {
+                DataRow dr = dt.NewRow();
+                dr["RowName"] = myRowsName[i];
+                dr["Value"] = myRowsValue[i];
+                dt.Rows.Add(dr);
+            }
+
+            dt.AcceptChanges();
+
+            return GetGridChartJsonString(dt, myColumnsName, myRowsName, myUnitX, myUnitY, myFrozenColumns);
+        }
+
         /// <summary>
         /// Chart相关数据
         /// </summary>
