@@ -133,7 +133,8 @@ namespace EasyUIJsonParser
                 {
                     result.Append(",\"" + column + "\":\"" + child[column] + "\"");
                 }
-                result.Append(",\"state\":\"open\",\"children\":[");
+                //result.Append(",\"state\":\"open\",\"children\":[");
+                result.Append(",\"children\":[");
                 // 递归获取当前节点的子节点
                 Append(result, table, levelCodeColumn, idColumn, textColumn, child[levelCodeColumn].ToString(), otherColumns);
                 result.Append("]},");
