@@ -32,7 +32,7 @@ namespace EasyUIJsonParser
             result.Append("[");
 
             // 获取层次码前缀
-            string prefix = table.Rows[0][levelCodeColumn].ToString().Substring(0, 1);
+            string prefix = table.Rows[0][levelCodeColumn].ToString().Substring(0, table.Rows[0][levelCodeColumn].ToString().Length-2);
             // 递归生成节点
             DataTableToJsonByLevelCodeAppend(result, table, levelCodeColumn, prefix, columnsToParse);
 
