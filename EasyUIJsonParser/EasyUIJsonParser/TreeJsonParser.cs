@@ -131,7 +131,9 @@ namespace EasyUIJsonParser
                 result.Append("{\"id\":\"" + child[idColumn] + "\",\"text\":\"" + child[textColumn] + "\"");
                 foreach (string column in otherColumns)
                 {
-                    result.Append(",\"" + column + "\":\"" + child[column] + "\"");
+                    string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(child[column], table.Columns[column].DataType);  //增加保留小数点功能
+                    //result.Append(",\"" + column + "\":\"" + child[column] + "\"");
+                    result.Append(",\"" + column + "\":\"" + m_ColumnValue + "\"");
                 }
                 //result.Append(",\"state\":\"open\",\"children\":[");
                 result.Append(",\"children\":[");
@@ -171,7 +173,9 @@ namespace EasyUIJsonParser
                         {
                             foreach (string myOtherColumnId in otherColumns)
                             {
-                                temp.Append(string.Format(",\"{0}\":\"{1}\"", myOtherColumnId, row[myOtherColumnId]));
+                                string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(row[myOtherColumnId], table.Columns[myOtherColumnId].DataType);  //增加保留小数点功能
+                                //temp.Append(string.Format(",\"{0}\":\"{1}\"", myOtherColumnId, row[myOtherColumnId]));
+                                temp.Append(string.Format(",\"{0}\":\"{1}\"", myOtherColumnId, m_ColumnValue));
                             }
                         }
                         if (table.Select(string.Format("{0}='{1}'", relativeColumn, row[idColumn])).Length > 0)

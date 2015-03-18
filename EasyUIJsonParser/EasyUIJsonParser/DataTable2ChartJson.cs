@@ -68,7 +68,9 @@ namespace EasyUIJsonParser
                 {
                     JsonData dataItem = new JsonData();
                     dataItem.Name = "Col" + i.ToString();
-                    dataItem.Value = row[j].ToString().Trim();
+                    string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(row[j], dataTable.Columns[j].DataType);  //增加保留小数点功能
+                    dataItem.Value = m_ColumnValue.Trim();
+                    //dataItem.Value = row[j].ToString().Trim();
                     columnsJson.Add(i, dataItem);
                     i++;
                 }

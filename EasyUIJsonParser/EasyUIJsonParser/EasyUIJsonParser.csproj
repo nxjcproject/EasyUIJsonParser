@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -45,6 +46,7 @@
     <Compile Include="ComboboxJsonParser.cs" />
     <Compile Include="DataGridJsonParser.cs" />
     <Compile Include="DataTable2ChartJson.cs" />
+    <Compile Include="GetConfigInfo.cs" />
     <Compile Include="Infrastructure\JsonData.cs" />
     <Compile Include="Infrastructure\JsonHelper.cs" />
     <Compile Include="Infrastructure\ParserHelper.cs" />

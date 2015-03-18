@@ -29,7 +29,8 @@ namespace EasyUIJsonParser
                 }
                 foreach (string column in columnsToParse)
                 {
-                    sb.Append("\"").Append(column).Append("\":").Append("\"").Append(row[column].ToString().Trim()).Append("\",");
+                    string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(row[column], table.Columns[column].DataType);  //增加保留小数点功能
+                    sb.Append("\"").Append(column).Append("\":").Append("\"").Append(m_ColumnValue.Trim()).Append("\",");
                 }
                 sb.Remove(sb.Length - 1, 1);
                 sb.Append("},");
@@ -79,7 +80,8 @@ namespace EasyUIJsonParser
                 }
                 foreach (string column in columnsToParse)
                 {
-                    sb.Append("\"").Append(column).Append("\":").Append("\"").Append(row[column].ToString().Trim()).Append("\",");
+                    string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(row[column], table.Columns[column].DataType);  //增加保留小数点功能
+                    sb.Append("\"").Append(column).Append("\":").Append("\"").Append(m_ColumnValue.Trim()).Append("\",");
                 }
                 sb.Remove(sb.Length - 1, 1);
                 sb.Append("},");

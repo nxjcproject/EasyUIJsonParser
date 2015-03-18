@@ -56,7 +56,9 @@ namespace EasyUIJsonParser
                 result.Append("{\"id\":\"" + child[levelCodeColumn] + "\"");
                 foreach (string column in otherColumns)
                 {
-                    result.Append(",\"" + column + "\":\"" + child[column] + "\"");
+                    string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(child[column], table.Columns[column].DataType);  //增加保留小数点功能
+                    //result.Append(",\"" + column + "\":\"" + child[column] + "\"");
+                    result.Append(",\"" + column + "\":\"" + m_ColumnValue + "\"");
                 }
                 //result.Append(",\"state\":\"open\",\"children\":[");
                 result.Append(",\"children\":[");
@@ -89,7 +91,9 @@ namespace EasyUIJsonParser
             {
                 sb.Append("{");
                 sb.Append("\"guid\":\"").Append(Guid.NewGuid()).Append("\",");
-                sb.Append("\"").Append(columnsToParse[0]).Append("\":").Append("\"").Append(rootRow[0].ToString().Trim()).Append("\",");
+                string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(rootRow[0], rootTable.Columns[0].DataType);  //增加保留小数点功能
+                //sb.Append("\"").Append(columnsToParse[0]).Append("\":").Append("\"").Append(rootRow[0].ToString().Trim()).Append("\",");
+                sb.Append("\"").Append(columnsToParse[0]).Append("\":").Append("\"").Append(m_ColumnValue.Trim()).Append("\",");
                 sb.Append("\"state\":\"closed\",");
                 sb.Append("\"children\":[");
 
@@ -104,7 +108,9 @@ namespace EasyUIJsonParser
                         sb.Append("\"guid\":\"").Append(Guid.NewGuid()).Append("\",");
                         foreach (string column in columnsToParse)
                         {
-                            sb.Append("\"").Append(column).Append("\":").Append("\"").Append(child[column].ToString().Trim()).Append("\",");
+                            m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(child[column], rootTable.Columns[column].DataType);  //增加保留小数点功能
+                            //sb.Append("\"").Append(column).Append("\":").Append("\"").Append(child[column].ToString().Trim()).Append("\",");
+                            sb.Append("\"").Append(column).Append("\":").Append("\"").Append(m_ColumnValue.Trim()).Append("\",");
                         }
                         sb.Remove(sb.Length - 1, 1);
 
@@ -157,7 +163,9 @@ namespace EasyUIJsonParser
 
                 foreach (string column in columnsToParse)
                 {
-                    sb.Append("\"").Append(column).Append("\":").Append("\"").Append(row[column].ToString().Trim()).Append("\",");
+                    string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(row[column], table.Columns[column].DataType);  //增加保留小数点功能
+                    //sb.Append("\"").Append(column).Append("\":").Append("\"").Append(row[column].ToString().Trim()).Append("\",");
+                    sb.Append("\"").Append(column).Append("\":").Append("\"").Append(m_ColumnValue.Trim()).Append("\",");
                 }
                 sb.Remove(sb.Length - 1, 1);
                 sb.Append("},");
@@ -272,7 +280,9 @@ namespace EasyUIJsonParser
                         {
                             foreach (string myOtherColumnId in otherColumns)
                             {
-                                temp.Append(string.Format(",\"{0}\":\"{1}\"", myOtherColumnId, row[myOtherColumnId]));
+                                string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(row[myOtherColumnId], table.Columns[myOtherColumnId].DataType);  //增加保留小数点功能
+                                //temp.Append(string.Format(",\"{0}\":\"{1}\"", myOtherColumnId, row[myOtherColumnId]));
+                                temp.Append(string.Format(",\"{0}\":\"{1}\"", myOtherColumnId, m_ColumnValue));
                             }
                         }
                         else
@@ -281,7 +291,9 @@ namespace EasyUIJsonParser
                             {
                                 if (myTableColumnId != idColumn && myTableColumnId != textColumn)
                                 {
-                                    temp.Append(string.Format(",\"{0}\":\"{1}\"", myTableColumnId, row[myTableColumnId]));
+                                    string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(row[myTableColumnId], table.Columns[myTableColumnId].DataType);  //增加保留小数点功能
+                                    //temp.Append(string.Format(",\"{0}\":\"{1}\"", myTableColumnId, row[myTableColumnId]));
+                                    temp.Append(string.Format(",\"{0}\":\"{1}\"", myTableColumnId, m_ColumnValue));
                                 }
                             }
                         }
