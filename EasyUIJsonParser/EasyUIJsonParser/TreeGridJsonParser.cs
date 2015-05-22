@@ -18,8 +18,11 @@ namespace EasyUIJsonParser
         /// <param name="levelCodeColumn"></param>
         /// <param name="columnsToParse"></param>
         /// <returns></returns>
-        public static string DataTableToJsonByLevelCode(DataTable table, string levelCodeColumn, params string[] columnsToParse)
+        public static string DataTableToJsonByLevelCode(DataTable myTable, string levelCodeColumn, params string[] columnsToParse)
         {
+            myTable.DefaultView.Sort = levelCodeColumn + " asc";
+            DataTable table = myTable.DefaultView.ToTable();
+
             // 当表为空时，返回空json
             if (table == null || table.Rows.Count == 0)
                 return "[]";
@@ -108,7 +111,7 @@ namespace EasyUIJsonParser
                         sb.Append("\"guid\":\"").Append(Guid.NewGuid()).Append("\",");
                         foreach (string column in columnsToParse)
                         {
-                            m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(child[column], rootTable.Columns[column].DataType);  //增加保留小数点功能
+                            m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(child[column], table.Columns[column].DataType);  //增加保留小数点功能
                             //sb.Append("\"").Append(column).Append("\":").Append("\"").Append(child[column].ToString().Trim()).Append("\",");
                             sb.Append("\"").Append(column).Append("\":").Append("\"").Append(m_ColumnValue.Trim()).Append("\",");
                         }

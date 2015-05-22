@@ -17,8 +17,10 @@ namespace EasyUIJsonParser
         /// <param name="idColumn"></param>
         /// <param name="textColumn"></param>
         /// <returns></returns>
-        public static string DataTableToJsonByLevelCodeWithIdColumn(DataTable table, string levelCodeColumn, string idColumn, string textColumn)
+        public static string DataTableToJsonByLevelCodeWithIdColumn(DataTable myTable, string levelCodeColumn, string idColumn, string textColumn)
         {
+            myTable.DefaultView.Sort = levelCodeColumn + " asc";
+            DataTable table = myTable.DefaultView.ToTable();
             // 当表为空时，返回空json
             if (table == null || table.Rows.Count == 0)
                 return "[]";
@@ -58,8 +60,10 @@ namespace EasyUIJsonParser
         /// <param name="textColumn"></param>
         /// <param name="otherColumns"></param>
         /// <returns></returns>
-        public static string DataTableToJsonByLevelCodeWithIdColumn(DataTable table, string levelCodeColumn, string idColumn, string textColumn, params string[] otherColumns)
+        public static string DataTableToJsonByLevelCodeWithIdColumn(DataTable myTable, string levelCodeColumn, string idColumn, string textColumn, params string[] otherColumns)
         {
+            myTable.DefaultView.Sort = levelCodeColumn + " asc";
+            DataTable table = myTable.DefaultView.ToTable();
             // 当表为空时，返回空json
             if (table == null || table.Rows.Count == 0)
                 return "[]";
@@ -87,6 +91,7 @@ namespace EasyUIJsonParser
         /// <returns>json</returns>
         public static string DataTableToJsonByLevelCode(DataTable table, string levelCodeColumn, string textColumn)
         {
+
             return DataTableToJsonByLevelCodeWithIdColumn(table, levelCodeColumn, levelCodeColumn, textColumn);
         }
 

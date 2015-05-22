@@ -89,8 +89,9 @@ namespace EasyUIJsonParser
                     }
                     for (int j = 0; j < myDataTable.Columns.Count; j++)
                     {
+                        string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(myDataTable.Rows[i][j], myDataTable.Columns[j].DataType);  //增加保留小数点功能
                         Json.Append(",");
-                        Json.Append("\"" + myDataTable.Columns[j].ColumnName.ToString() + "\":\"" + myDataTable.Rows[i][j].ToString() + "\"");
+                        Json.Append("\"" + myDataTable.Columns[j].ColumnName.ToString() + "\":\"" + m_ColumnValue + "\"");
                     }
                     Json.Append("}");
                     if (i < myDataTable.Rows.Count - 1)
