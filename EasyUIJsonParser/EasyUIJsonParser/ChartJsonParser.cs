@@ -94,7 +94,7 @@ namespace EasyUIJsonParser
                         Json.Append("\"" + myDataTable.Columns[j].ColumnName.ToString() + "\":\"" + m_ColumnValue + "\"");
                     }
                     Json.Append("}");
-                    if (i < myDataTable.Rows.Count - 1)
+                    if (i < m_MaxRowCount - 1)
                     {
                         Json.Append(",");
                     }
