@@ -10,6 +10,10 @@ namespace EasyUIJsonParser
 {
     public class DataGridJsonParser
     {
+        private string ToString()
+        {
+            return this.ToString().Replace("\n","\\n");
+        }
         public static string DataTableToJson(DataTable table, params string[] columnsToParse)
         {
             if (table == null || table.Rows.Count == 0)
