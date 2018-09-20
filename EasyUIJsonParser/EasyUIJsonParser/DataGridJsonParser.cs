@@ -10,10 +10,6 @@ namespace EasyUIJsonParser
 {
     public class DataGridJsonParser
     {
-        private string ToString()
-        {
-            return this.ToString().Replace("\n","\\n");
-        }
         public static string DataTableToJson(DataTable table, params string[] columnsToParse)
         {
             if (table == null || table.Rows.Count == 0)
@@ -44,7 +40,43 @@ namespace EasyUIJsonParser
 
             return sb.ToString();
         }
+        /// <summary>
+        /// 根据用户输入的保留位数对decimal进行小数点保留
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="parseDecimal">是否转换decimal(只为函数不重名,true和false都可以)</param>
+        /// <param name="decimalReservationCount">decimal要保留的位数</param>
+        /// <param name="columnsToParse">转换成json串的列名</param>
+        /// <returns></returns>
+        public static string DataTableToJson(DataTable table, bool parseDecimal,int decimalReservationCount, params string[] columnsToParse)
+        {
+            if (table == null || table.Rows.Count == 0)
+                return "{\"total\":0,\"rows\":[]}";
 
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"total\":").Append(table.Rows.Count).Append(",");
+            sb.Append("\"rows\":[");
+            foreach (DataRow row in table.Rows)
+            {
+                sb.Append("{");
+
+                if (columnsToParse.Count() == 0)
+                {
+                    columnsToParse = ParserHelper.GetColumnName(table);
+                }
+                foreach (string column in columnsToParse)
+                {
+                        string m_ColumnValue = GetConfigInfo.CustomFormatDecinalPlaces(row[column], table.Columns[column].DataType, decimalReservationCount);  //根据用户输入的保留数设置
+                        sb.Append("\"").Append(column).Append("\":").Append("\"").Append(m_ColumnValue.Trim()).Append("\",");
+                }
+                sb.Remove(sb.Length - 1, 1);
+                sb.Append("},");
+            }
+            sb.Remove(sb.Length - 1, 1);
+            sb.Append("]}");
+
+            return sb.ToString();
+        }
         /// <summary>
         /// 自定义行数Table转json
         /// </summary>
@@ -92,7 +124,6 @@ namespace EasyUIJsonParser
             }
             sb.Remove(sb.Length - 1, 1);
             sb.Append("]");
-
             return sb.ToString();
         }
         /// <summary>

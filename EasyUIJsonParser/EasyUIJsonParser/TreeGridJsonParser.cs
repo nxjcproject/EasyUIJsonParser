@@ -290,8 +290,9 @@ namespace EasyUIJsonParser
                         }
                         else
                         {
-                            foreach (string myTableColumnId in table.Columns)
+                            for (int i = 0; i < table.Columns.Count; i++)
                             {
+                                string myTableColumnId = table.Columns[i].ColumnName;
                                 if (myTableColumnId != idColumn && myTableColumnId != textColumn)
                                 {
                                     string m_ColumnValue = GetConfigInfo.FormatDecimalPlaces(row[myTableColumnId], table.Columns[myTableColumnId].DataType);  //增加保留小数点功能
